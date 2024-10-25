@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21  # 使用 Corretto JDK 8，可以根据需要选择 Java 11
+    commands:
+      - echo "Installing Android SDK tools and dependencies"
+      - sdkmanager --install "build-tools;35.0.0" "platforms;android-34" "platform-tools"
+      - yes | sdkmanager --licenses
+  pre_build:
+    commands:
+      - echo "Running pre-build steps"
+      - chmod +x gradlew  # 确保 gradlew 可执行
+  build:
+    commands:
+      - echo "Building Android project"
+      - ./gradlew clean assembleDebug  # 可替换为具体的构建任务，比如 assembleDebug
+  post_build:
+    commands:
+      - echo "Build completed"
+
+artifacts:
+  files:
+    - app/build/outputs/**/*.apk  # 保存所有生成的 APK 文件
+  discard-paths: no  # 保留文件路径
